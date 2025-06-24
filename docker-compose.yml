@@ -1,0 +1,32 @@
+# Minecraft Java Paper Server + Geyser + Floodgate Docker Container
+# https://github.com/TheRemote/Legendary-Java-Minecraft-Geyser-Floodgate
+services:
+  minecraft:
+    image: 05jchambers/legendary-minecraft-geyser-floodgate:latest
+    restart: "unless-stopped"
+    ports:
+      - "25565:25565"    # Java Edition
+      - "19132:19132"    # Bedrock Edition
+      - "19132:19132/udp" # Bedrock Edition UDP
+    volumes:
+      - minecraft_data:/minecraft
+      - ../../minecraft-gluten-free-bread/target/gluten-free-bread-1.0.1.jar:/minecraft/plugins/gluten-free-bread-1.0.1.jar:ro
+      - ./config.yml:/minecraft/plugins/StarterPack/config.yml:ro
+      - ./target/starter-pack-1.0.0.jar:/minecraft/plugins/starter-pack-1.0.0.jar:ro
+    stdin_open: true # docker run -i
+    tty: true # docker run -t
+    entrypoint: ["/bin/bash", "/scripts/start.sh"]
+    environment:
+      Port: "25565"
+      BedrockPort: "19132"
+      TZ: "America/New_York"
+      MaxMemory: 4096
+      Version: "1.21.6" # Force latest Paper version
+      NoBackup: "plugins" # Skip plugins during backups
+      NoPermCheck: "Y" # Skip permissions check
+      NoViaVersion: "Y" # Enable ViaVersion for compatibility
+      QuietCurl: "Y" # Reduce curl log output
+
+volumes:
+  minecraft_data:
+    driver: local

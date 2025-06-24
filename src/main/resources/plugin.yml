@@ -1,0 +1,27 @@
+name: StarterPack
+version: '${project.version}'
+main: world.hv2.starterpack.StarterPackPlugin
+api-version: '1.21'
+load: STARTUP
+author: Carmelo Santana
+description: A lightweight plugin that gives first-time players a configurable starter inventory
+website: https://hv2.world
+
+commands:
+  starterpack:
+    description: Starter pack management commands
+    usage: /<command> [help|version|reload|give|reset|stats]
+    permission: starterpack.use
+    permission-message: You don't have permission to use this command.
+    aliases: [sp, starter]
+
+permissions:
+  starterpack.use:
+    description: Basic permission to use starter pack commands
+    default: true
+  starterpack.admin:
+    description: Permission to reload config and give packs to players
+    default: op
+  starterpack.bypass:
+    description: Players with this permission won't receive starter packs
+    default: false
