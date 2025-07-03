@@ -1,12 +1,13 @@
 package world.hv2.starterpack.commands;
 
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
-import org.bukkit.ChatColor;
 
 import world.hv2.starterpack.StarterPackPlugin;
 
@@ -49,28 +50,27 @@ public class StarterPackCommand implements CommandExecutor, TabCompleter {
                 sendHelpMessage(sender);
                 return true;
             default:
-                sendMessage(sender, "&cUnknown command. Use &f/starterpack help &cfor available commands.");
+                sender.sendMessage(Component.text("Unknown command. Use /starterpack help for available commands.", NamedTextColor.RED));
                 return true;
         }
     }
-    
-    /**
+     /**
      * Handle reload command
      */
     private boolean handleReload(CommandSender sender) {
         if (!sender.hasPermission("starterpack.admin")) {
-            sendMessage(sender, "&cYou don't have permission to reload the configuration.");
+            sender.sendMessage(Component.text("You don't have permission to reload the configuration.", NamedTextColor.RED));
             return true;
         }
-        
+
         try {
             plugin.reloadPluginConfig();
-            sendMessage(sender, "&aConfiguration reloaded successfully!");
+            sender.sendMessage(Component.text("Configuration reloaded successfully!", NamedTextColor.GREEN));
         } catch (Exception e) {
-            sendMessage(sender, "&cError reloading configuration: " + e.getMessage());
+            sender.sendMessage(Component.text("Error reloading configuration: " + e.getMessage(), NamedTextColor.RED));
             plugin.getLogger().severe("Error reloading config: " + e.getMessage());
         }
-        
+
         return true;
     }
     
@@ -79,12 +79,12 @@ public class StarterPackCommand implements CommandExecutor, TabCompleter {
      */
     private boolean handleGive(CommandSender sender, String[] args) {
         if (!sender.hasPermission("starterpack.admin")) {
-            sendMessage(sender, "&cYou don't have permission to give starter packs.");
+            sender.sendMessage(Component.text("You don't have permission to give starter packs.", NamedTextColor.RED));
             return true;
         }
         
         if (args.length < 2) {
-            sendMessage(sender, "&cUsage: /starterpack give <player>");
+            sender.sendMessage(Component.text("Usage: /starterpack give <player>", NamedTextColor.RED));
             return true;
         }
         
@@ -92,17 +92,17 @@ public class StarterPackCommand implements CommandExecutor, TabCompleter {
         Player target = Bukkit.getPlayer(playerName);
         
         if (target == null) {
-            sendMessage(sender, "&cPlayer '" + playerName + "' not found or not online.");
+            sender.sendMessage(Component.text("Player '" + playerName + "' not found or not online.", NamedTextColor.RED));
             return true;
         }
         
         boolean success = plugin.getStarterPackManager().forceGiveStarterPack(target);
         
         if (success) {
-            sendMessage(sender, "&aSuccessfully gave starter pack to " + target.getName() + "!");
-            sendMessage(target, "&aYou have been given a starter pack by " + sender.getName() + "!");
+            sender.sendMessage(Component.text("Successfully gave starter pack to " + target.getName() + "!", NamedTextColor.GREEN));
+            target.sendMessage(Component.text("You have been given a starter pack by " + sender.getName() + "!", NamedTextColor.GREEN));
         } else {
-            sendMessage(sender, "&cFailed to give starter pack to " + target.getName() + ".");
+            sender.sendMessage(Component.text("Failed to give starter pack to " + target.getName() + ".", NamedTextColor.RED));
         }
         
         return true;
@@ -113,12 +113,12 @@ public class StarterPackCommand implements CommandExecutor, TabCompleter {
      */
     private boolean handleReset(CommandSender sender, String[] args) {
         if (!sender.hasPermission("starterpack.admin")) {
-            sendMessage(sender, "&cYou don't have permission to reset starter pack data.");
+            sender.sendMessage(Component.text("You don't have permission to reset starter pack data.", NamedTextColor.RED));
             return true;
         }
         
         if (args.length < 2) {
-            sendMessage(sender, "&cUsage: /starterpack reset <player|all>");
+            sender.sendMessage(Component.text("Usage: /starterpack reset <player|all>", NamedTextColor.RED));
             return true;
         }
         
@@ -127,26 +127,26 @@ public class StarterPackCommand implements CommandExecutor, TabCompleter {
         if (target.equalsIgnoreCase("all")) {
             int resetCount = plugin.getStarterPackManager().resetAllPlayersStarterPack();
             if (resetCount >= 0) {
-                sendMessage(sender, "&aSuccessfully reset starter pack status for " + resetCount + " online players!");
-                sendMessage(sender, "&7Note: This only affects online players. Offline players will retain their status.");
+                sender.sendMessage(Component.text("Successfully reset starter pack status for " + resetCount + " online players!", NamedTextColor.GREEN));
+                sender.sendMessage(Component.text("Note: This only affects online players. Offline players will retain their status.", NamedTextColor.GRAY));
             } else {
-                sendMessage(sender, "&cFailed to reset starter pack status for all players.");
+                sender.sendMessage(Component.text("Failed to reset starter pack status for all players.", NamedTextColor.RED));
             }
             return true;
         }
         
         Player targetPlayer = Bukkit.getPlayer(target);
         if (targetPlayer == null) {
-            sendMessage(sender, "&cPlayer '" + target + "' not found or not online.");
+            sender.sendMessage(Component.text("Player '" + target + "' not found or not online.", NamedTextColor.RED));
             return true;
         }
         
         boolean success = plugin.getStarterPackManager().resetPlayerStarterPack(targetPlayer);
         if (success) {
-            sendMessage(sender, "&aSuccessfully reset starter pack status for " + targetPlayer.getName() + "!");
-            sendMessage(targetPlayer, "&eYour starter pack status has been reset by " + sender.getName() + ". You can receive it again on next join!");
+            sender.sendMessage(Component.text("Successfully reset starter pack status for " + targetPlayer.getName() + "!", NamedTextColor.GREEN));
+            targetPlayer.sendMessage(Component.text("Your starter pack status has been reset by " + sender.getName() + ". You can receive it again on next join!", NamedTextColor.YELLOW));
         } else {
-            sendMessage(sender, "&cFailed to reset starter pack status for " + targetPlayer.getName() + ".");
+            sender.sendMessage(Component.text("Failed to reset starter pack status for " + targetPlayer.getName() + ".", NamedTextColor.RED));
         }
         
         return true;
@@ -156,9 +156,9 @@ public class StarterPackCommand implements CommandExecutor, TabCompleter {
      * Handle stats command
      */
     private boolean handleStats(CommandSender sender) {
-        sendMessage(sender, "&6=== StarterPack Statistics ===");
+        sender.sendMessage(Component.text("=== StarterPack Statistics ===", NamedTextColor.GOLD));
         String stats = plugin.getStarterPackManager().getStarterPackStats();
-        sendMessage(sender, "&7" + stats);
+        sender.sendMessage(Component.text(stats, NamedTextColor.GRAY));
         return true;
     }
     
@@ -166,18 +166,28 @@ public class StarterPackCommand implements CommandExecutor, TabCompleter {
      * Handle version command
      */
     private boolean handleVersion(CommandSender sender) {
-        sendMessage(sender, "&6StarterPack Plugin");
-        sendMessage(sender, "&7Version: &f" + plugin.getDescription().getVersion());
-        sendMessage(sender, "&7Author: &f" + plugin.getDescription().getAuthors().toString().replace("[", "").replace("]", ""));
-        sendMessage(sender, "&7Website: &f" + plugin.getDescription().getWebsite());
-        sendMessage(sender, "&7Description: &f" + plugin.getDescription().getDescription());
+        sender.sendMessage(Component.text("=== StarterPack Plugin ===", NamedTextColor.GOLD));
+        sender.sendMessage(Component.text("Version: ", NamedTextColor.YELLOW)
+            .append(Component.text(plugin.getPluginMeta().getVersion(), NamedTextColor.WHITE)));
+        sender.sendMessage(Component.text("Author: ", NamedTextColor.YELLOW)
+            .append(Component.text("Carmelo Santana", NamedTextColor.WHITE)));
+        sender.sendMessage(Component.text("Website: ", NamedTextColor.YELLOW)
+            .append(Component.text("https://hv2.world", NamedTextColor.AQUA)));
+        sender.sendMessage(Component.text("Description: ", NamedTextColor.YELLOW)
+            .append(Component.text(plugin.getPluginMeta().getDescription(), NamedTextColor.WHITE)));
         
         // Show configuration status
-        sendMessage(sender, "");
-        sendMessage(sender, "&6Configuration Status:");
-        sendMessage(sender, "&7Enabled: " + (plugin.getConfigManager().isStarterPackEnabled() ? "&aYes" : "&cNo"));
-        sendMessage(sender, "&7Broadcast: " + (plugin.getConfigManager().isBroadcastEnabled() ? "&aYes" : "&cNo"));
-        sendMessage(sender, "&7Debug: " + (plugin.getConfigManager().isDebugEnabled() ? "&aYes" : "&cNo"));
+        sender.sendMessage(Component.text(""));
+        sender.sendMessage(Component.text("Configuration Status:", NamedTextColor.GOLD));
+        sender.sendMessage(Component.text("Enabled: ", NamedTextColor.YELLOW)
+            .append(Component.text((plugin.getConfigManager().isStarterPackEnabled() ? "Yes" : "No"), 
+                plugin.getConfigManager().isStarterPackEnabled() ? NamedTextColor.GREEN : NamedTextColor.RED)));
+        sender.sendMessage(Component.text("Broadcast: ", NamedTextColor.YELLOW)
+            .append(Component.text((plugin.getConfigManager().isBroadcastEnabled() ? "Yes" : "No"), 
+                plugin.getConfigManager().isBroadcastEnabled() ? NamedTextColor.GREEN : NamedTextColor.RED)));
+        sender.sendMessage(Component.text("Debug: ", NamedTextColor.YELLOW)
+            .append(Component.text((plugin.getConfigManager().isDebugEnabled() ? "Yes" : "No"), 
+                plugin.getConfigManager().isDebugEnabled() ? NamedTextColor.GREEN : NamedTextColor.RED)));
         
         return true;
     }
@@ -186,27 +196,26 @@ public class StarterPackCommand implements CommandExecutor, TabCompleter {
      * Send help message
      */
     private void sendHelpMessage(CommandSender sender) {
-        sendMessage(sender, "&6=== StarterPack Commands ===");
-        sendMessage(sender, "&f/starterpack help &7- Show this help message");
-        sendMessage(sender, "&f/starterpack version &7- Show plugin version and status");
+        sender.sendMessage(Component.text("=== StarterPack Commands ===", NamedTextColor.GOLD));
+        sender.sendMessage(Component.text("/starterpack help", NamedTextColor.YELLOW)
+            .append(Component.text(" - Show this help message", NamedTextColor.GRAY)));
+        sender.sendMessage(Component.text("/starterpack version", NamedTextColor.YELLOW)
+            .append(Component.text(" - Show plugin version and status", NamedTextColor.GRAY)));
         
         if (sender.hasPermission("starterpack.admin")) {
-            sendMessage(sender, "&f/starterpack reload &7- Reload configuration");
-            sendMessage(sender, "&f/starterpack give <player> &7- Give starter pack to a player");
-            sendMessage(sender, "&f/starterpack reset <player|all> &7- Reset starter pack status");
-            sendMessage(sender, "&f/starterpack stats &7- Show starter pack statistics");
+            sender.sendMessage(Component.text("/starterpack reload", NamedTextColor.YELLOW)
+                .append(Component.text(" - Reload configuration", NamedTextColor.GRAY)));
+            sender.sendMessage(Component.text("/starterpack give <player>", NamedTextColor.YELLOW)
+                .append(Component.text(" - Give starter pack to a player", NamedTextColor.GRAY)));
+            sender.sendMessage(Component.text("/starterpack reset <player|all>", NamedTextColor.YELLOW)
+                .append(Component.text(" - Reset starter pack status", NamedTextColor.GRAY)));
+            sender.sendMessage(Component.text("/starterpack stats", NamedTextColor.YELLOW)
+                .append(Component.text(" - Show starter pack statistics", NamedTextColor.GRAY)));
         }
         
-        sendMessage(sender, "");
-        sendMessage(sender, "&7Aliases: &f/sp, /starter");
-    }
-    
-    /**
-     * Send formatted message to sender
-     */
-    private void sendMessage(CommandSender sender, String message) {
-        String prefix = "&8[&6StarterPack&8] ";
-        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', prefix + message));
+        sender.sendMessage(Component.text(""));
+        sender.sendMessage(Component.text("Aliases: ", NamedTextColor.AQUA)
+            .append(Component.text("/sp, /starter", NamedTextColor.WHITE)));
     }
     
     @Override
