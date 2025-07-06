@@ -2,6 +2,25 @@
 
 A lightweight Minecraft plugin that gives **first-time players** a configurable **starter inventory** on join — no setup required. Ideal for survival or adventure servers that want to give players a head start with gear, tools, food, or books.
 
+- [Features](#features)
+- [Default Starter Pack](#default-starter-pack)
+- [Quick Install](#quick-install)
+- [Configuration](#configuration)
+  - [🔁 Placeholders](#-placeholders)
+- [Commands](#commands)
+- [Admin Commands](#admin-commands)
+- [Permissions](#permissions)
+- [Contributing](#contributing)
+  - [Developer Quick Start](#developer-quick-start)
+- [🎓 Learn AI Powered Plugin Development](#-learn-ai-powered-plugin-development)
+  - [What You'll Learn](#what-youll-learn)
+  - [Course Topics](#course-topics)
+  - [Booking Information](#booking-information)
+    - [1-on-1 Coaching Sessions Available](#1-on-1-coaching-sessions-available)
+    - [What's Included](#whats-included)
+  - [Get Started](#get-started)
+- [License](#license)
+
 ## Features
 
 - 🎁 Gives new players a **starter item pack**
@@ -99,111 +118,31 @@ starter-pack:
 | `starterpack.admin` | Admin commands | `op` |
 | `starterpack.bypass` | Don't receive starter pack | `false` |
 
-## Development
-
-### Prerequisites
-
-- Java 21+
-- Maven 3.6+
-- Docker (for testing)
-
-### Building
-
-```bash
-# Clone the repository
-git clone https://github.com/carmelosantana/starter-pack
-cd starter-pack
-
-# Build the plugin
-make build
-
-# Set up development server
-make setup
-
-# Start the server
-make start
-
-# Quick development cycle (build + install + restart)
-make dev
-```
-
-### Available Make Targets
-
-| Target | Description |
-|--------|-------------|
-| `make setup` | Initial server setup |
-| `make build` | Build the plugin JAR |
-| `make start` | Start the test server |
-| `make stop` | Stop the test server |
-| `make restart` | Restart the server |
-| `make dev` | Quick development cycle |
-| `make test` | Run tests |
-| `make docker-test` | Test in Docker container |
-| `make clean` | Clean server files |
-| `make logs` | Show server logs |
-
-### Testing
-
-The plugin includes both unit tests and integration tests:
-
-```bash
-# Run unit tests
-make test
-
-# Test in Docker container
-make docker-test
-
-# Test on local server
-make setup
-make dev
-```
-
-### Server Management
-
-The project includes a comprehensive server management script:
-
-```bash
-# Direct script usage
-./server-manager.sh setup
-./server-manager.sh start
-./server-manager.sh attach  # Attach to server console
-./server-manager.sh players # Show online players
-```
-
-## Docker Support
-
-Test the plugin in an isolated Docker environment:
-
-```bash
-# Build and test in Docker
-make docker-test
-
-# Or use docker-compose directly
-docker-compose up -d
-docker-compose logs -f minecraft
-```
-
 ## Contributing
 
-1. Fork the repository
-2. Create a feature branch: `git checkout -b feature/amazing-feature`
-3. Make your changes and test thoroughly
-4. Run tests: `make test`
-5. Test in Docker: `make docker-test`
-6. Submit a pull request
+Please review [Contributing Guidelines](./CONTRIBUTING.md) for developer documentation. Including;
 
-### Guidelines
+- Development environment setup
+- Code standards and testing procedures
+- Pull request process
+- Server management and Docker support
+- Troubleshooting
 
-- Follow existing code style
-- Add tests for new features
-- Update documentation as needed
-- Test on both local server and Docker
-- Ensure compatibility with Paper 1.21.6+
+### Developer Quick Start
 
-## Requirements
+```bash
+# Set up development environment
+make setup
 
-- **Server**: Paper 1.21.6+
-- **Java**: 21 or higher
+# Quick development cycle
+make dev
+
+# Run tests
+make test
+
+# Test in Docker
+make docker-test
+```
 
 ## 🎓 Learn AI Powered Plugin Development
 
