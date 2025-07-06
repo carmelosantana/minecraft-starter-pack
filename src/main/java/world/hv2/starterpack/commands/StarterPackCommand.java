@@ -172,7 +172,7 @@ public class StarterPackCommand implements CommandExecutor, TabCompleter {
         sender.sendMessage(Component.text("Author: ", NamedTextColor.YELLOW)
             .append(Component.text("Carmelo Santana", NamedTextColor.WHITE)));
         sender.sendMessage(Component.text("Website: ", NamedTextColor.YELLOW)
-            .append(Component.text("https://hv2.world", NamedTextColor.AQUA)));
+            .append(Component.text("https://xp.farm", NamedTextColor.AQUA)));
         sender.sendMessage(Component.text("Description: ", NamedTextColor.YELLOW)
             .append(Component.text(plugin.getPluginMeta().getDescription(), NamedTextColor.WHITE)));
         

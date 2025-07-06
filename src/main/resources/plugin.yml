@@ -5,7 +5,7 @@ api-version: '1.21'
 load: STARTUP
 author: Carmelo Santana
 description: A lightweight plugin that gives first-time players a configurable starter inventory
-website: https://hv2.world
+website: https://xp.farm
 
 commands:
   starterpack:
