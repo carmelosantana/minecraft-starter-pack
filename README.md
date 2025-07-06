@@ -2,7 +2,7 @@
 
 A lightweight Minecraft plugin that gives **first-time players** a configurable **starter inventory** on join — no setup required. Ideal for survival or adventure servers that want to give players a head start with gear, tools, food, or books.
 
-## ✨ Features
+## Features
 
 - 🎁 Gives new players a **starter item pack**
 - ✅ **Zero configuration required** — default pack included
@@ -13,7 +13,7 @@ A lightweight Minecraft plugin that gives **first-time players** a configurable 
 - 🚫 **One pack per player** — uses persistent data to track
 - 🔧 Admin commands for management and testing
 
-## 📦 Default Starter Pack
+## Default Starter Pack
 
 By default, players joining the server for the first time will receive:
 
@@ -23,7 +23,7 @@ By default, players joining the server for the first time will receive:
 | 🛠 Diamond Pickaxe     | §bStarter Pickaxe        | Unbreaking III, Efficiency II |
 | 🍞 Gluten-Free Bread ×3 | §fGluten-Free Bread       | Bonus healing food            |
 
-## 🚀 Quick Install
+## Quick Install
 
 1. Download the latest JAR from releases
 2. Place in your server's `plugins/` directory
@@ -31,7 +31,7 @@ By default, players joining the server for the first time will receive:
 4. Join the server with a new player account to receive items
 5. Optionally, configure in `plugins/StarterPack/config.yml`
 
-## ⚙️ Configuration
+## Configuration
 
 Edit `plugins/StarterPack/config.yml`:
 
@@ -68,7 +68,7 @@ starter-pack:
 
 - `{player}` — replaced with the new player's username in messages
 
-## 🛠 Commands
+## Commands
 
 | Command | Description | Permission |
 |---------|-------------|------------|
@@ -79,7 +79,7 @@ starter-pack:
 
 **Aliases**: `/sp`, `/starter`
 
-## 🔧 Admin Commands
+## Admin Commands
 
 | Command | Description | Permission |
 |---------|-------------|------------|
@@ -91,7 +91,7 @@ starter-pack:
 | `/starterpack reset all` | Reset all online players | `starterpack.admin` |
 | `/starterpack stats` | Show distribution statistics | `starterpack.admin` |
 
-## 🔐 Permissions
+## Permissions
 
 | Permission | Description | Default |
 |------------|-------------|---------|
@@ -99,7 +99,7 @@ starter-pack:
 | `starterpack.admin` | Admin commands | `op` |
 | `starterpack.bypass` | Don't receive starter pack | `false` |
 
-## 🏗 Development
+## Development
 
 ### Prerequisites
 
@@ -170,7 +170,7 @@ The project includes a comprehensive server management script:
 ./server-manager.sh players # Show online players
 ```
 
-## 🐳 Docker Support
+## Docker Support
 
 Test the plugin in an isolated Docker environment:
 
@@ -183,7 +183,7 @@ docker-compose up -d
 docker-compose logs -f minecraft
 ```
 
-## 🤝 Contributing
+## Contributing
 
 1. Fork the repository
 2. Create a feature branch: `git checkout -b feature/amazing-feature`
@@ -200,34 +200,57 @@ docker-compose logs -f minecraft
 - Test on both local server and Docker
 - Ensure compatibility with Paper 1.21.6+
 
-## 📋 Requirements
+## Requirements
 
-- **Server**: Paper 1.21.6+ (Spigot/Bukkit compatible)
+- **Server**: Paper 1.21.6+
 - **Java**: 21 or higher
-- **Players**: Works with both Java and Bedrock editions (via Geyser)
 
-## 📝 License
+## 🎓 Learn AI Powered Plugin Development
 
-Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)
+**Want to build your own Minecraft plugins?** I built our plugin collection using generative AI, and I can teach you how to do the same!
 
-## 👤 Author
+### What You'll Learn
 
-**Carmelo Santana**
-- Website: [hv2.world](https://hv2.world)
-- GitHub: [@carmelosantana](https://github.com/carmelosantana)
-- Test Server: `play.hv2.world`
+- **AI Assisted Coding**: How to effectively use AI tools like GitHub Copilot, ChatGPT, and Claude for plugin development
+- **Plugin Architecture**: Best practices for structuring robust, maintainable Minecraft plugins
+- **Modern Development**: Paper API, Maven build systems, Docker testing, and CI/CD workflows
+- **Problem Solving**: How to break down complex features into manageable tasks
+- **Code Quality**: Testing, debugging, and optimizing AI generated code
 
-## 🐛 Issues & Support
+### Course Topics
 
-- Report bugs on [GitHub Issues](https://github.com/carmelosantana/starter-pack/issues)
-- Join our test server: `play.hv2.world`
-- Check the [Wiki](https://github.com/carmelosantana/starter-pack/wiki) for guides
+- **Getting Started**: Setting up your AI development environment
+- **Plugin Fundamentals**: Events, commands, configuration, and permissions
+- **Advanced Features**: Custom items, recipes, data persistence, and performance optimization
+- **Testing & Deployment**: Docker containers, server management, and release workflows
+- **Real Projects**: Build actual plugins from concept to completion
 
-## 🔄 Version History
+### Booking Information
 
-- **1.0.0** - Initial release
-  - Basic starter pack functionality
-  - Configurable items with enchantments
-  - Admin commands and permissions
-  - Docker support for testing
-  - Comprehensive server management tools
+#### 1-on-1 Coaching Sessions Available
+
+- **Duration**: 1-2 hour sessions
+- **Format**: Screen share coding sessions via video call
+- **Family Friendly**: Parents are welcome and encouraged to join sessions, especially for younger students and curious parents wanting to learn alongside their children.
+
+#### What's Included
+
+- ✅ Live coding demonstration
+- ✅ AI prompt engineering techniques
+- ✅ Complete project setup and tooling
+- ✅ Plugin publishing and distribution
+- ✅ Follow up support and code review
+
+### Get Started
+
+Ready to accelerate your development with AI?
+
+- **[Schedule your call](https://cal.com/carmelosantana/learn-minecraft-with-ai)** - Book a session today!
+- **[Discord](https://discord.gg/udbJu8Sbyj)** - Ask questions, see examples.
+- **Public SMP Server** - Join us at `play.xp.farm` and test our plugins live!
+
+*Turn your plugin ideas into reality in hours, not weeks!*
+
+## License
+
+This project is licensed under the [Creative Commons Attribution-NonCommercial 4.0 International License](https://creativecommons.org/licenses/by-nc/4.0/).
