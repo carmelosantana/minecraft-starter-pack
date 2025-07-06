@@ -45,7 +45,7 @@ check_docker() {
 
 # Check if plugin JAR exists
 check_plugin() {
-    if [[ ! -f "target/starter-pack-1.0.0.jar" ]]; then
+    if [[ ! -f "target/starter-pack-1.0.1.jar" ]]; then
         print_error "Plugin JAR not found. Run 'make build' first."
         exit 1
     fi

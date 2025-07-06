@@ -10,7 +10,7 @@
     <packaging>jar</packaging>
 
     <name>StarterPack</name>
-    <description>A lightweight plugin that gives first-time players a configurable starter inventory</description>
+    <description>A lightweight plugin that gives first time players a configurable starter inventory.</description>
     <url>https://github.com/carmelosantana/minecraft-starter-pack</url>
 
     <properties>

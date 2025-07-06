@@ -12,7 +12,7 @@ services:
       - minecraft_data:/minecraft
       - ../../minecraft-gluten-free-bread/target/gluten-free-bread-1.0.1.jar:/minecraft/plugins/gluten-free-bread-1.0.1.jar:ro
       - ./config.yml:/minecraft/plugins/StarterPack/config.yml:ro
-      - ./target/starter-pack-1.0.0.jar:/minecraft/plugins/starter-pack-1.0.0.jar:ro
+      - ./target/starter-pack-1.0.1.jar:/minecraft/plugins/starter-pack-1.0..jar:ro
     stdin_open: true # docker run -i
     tty: true # docker run -t
     entrypoint: ["/bin/bash", "/scripts/start.sh"]
