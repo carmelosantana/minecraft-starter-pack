@@ -8,7 +8,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.persistence.PersistentDataType;
-import org.bukkit.ChatColor;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 
 import world.hv2.starterpack.StarterPackPlugin;
 
@@ -221,29 +222,18 @@ public class StarterPackManager {
         // Move armor to inventory
         for (ItemStack armorPiece : armor) {
             if (armorPiece != null && !armorPiece.getType().isAir()) {
-                if (player.getInventory().firstEmpty() != -1) {
-                    player.getInventory().addItem(armorPiece);
-                } else {
-                    player.getWorld().dropItem(player.getLocation(), armorPiece);
-                }
+                addToInventoryOrDrop(player, armorPiece);
             }
         }
         
-        // Move weapons/tools to inventory
-        if (mainHand != null && !mainHand.getType().isAir() && isWeaponOrTool(mainHand.getType())) {
-            if (player.getInventory().firstEmpty() != -1) {
-                player.getInventory().addItem(mainHand);
-            } else {
-                player.getWorld().dropItem(player.getLocation(), mainHand);
-            }
+        // Move main hand item to inventory
+        if (mainHand != null && !mainHand.getType().isAir()) {
+            addToInventoryOrDrop(player, mainHand);
         }
         
-        if (offHand != null && !offHand.getType().isAir() && isWeaponOrTool(offHand.getType())) {
-            if (player.getInventory().firstEmpty() != -1) {
-                player.getInventory().addItem(offHand);
-            } else {
-                player.getWorld().dropItem(player.getLocation(), offHand);
-            }
+        // Move offhand item to inventory
+        if (offHand != null && !offHand.getType().isAir()) {
+            addToInventoryOrDrop(player, offHand);
         }
     }
     
@@ -291,24 +281,69 @@ public class StarterPackManager {
     private void equipItemOnPlayer(Player player, ItemStack item) {
         Material material = item.getType();
         
-        // Check if item has slot specified in its persistent data or use material type
-        if (material.name().contains("_HELMET")) {
-            player.getInventory().setHelmet(item);
-        } else if (material.name().contains("_CHESTPLATE")) {
-            player.getInventory().setChestplate(item);
-        } else if (material.name().contains("_LEGGINGS")) {
-            player.getInventory().setLeggings(item);
-        } else if (material.name().contains("_BOOTS")) {
-            player.getInventory().setBoots(item);
-        } else if (isWeaponOrTool(material)) {
-            player.getInventory().setItemInMainHand(item);
-        } else {
-            // Default to adding to inventory if we can't determine slot
-            if (player.getInventory().firstEmpty() != -1) {
-                player.getInventory().addItem(item);
-            } else {
-                player.getWorld().dropItem(player.getLocation(), item);
+        // Check if item has slot specified in its persistent data
+        String configuredSlot = null;
+        if (item.hasItemMeta() && item.getItemMeta() != null) {
+            NamespacedKey slotKey = new NamespacedKey(plugin, "equipment_slot");
+            if (item.getItemMeta().getPersistentDataContainer().has(slotKey, PersistentDataType.STRING)) {
+                configuredSlot = item.getItemMeta().getPersistentDataContainer().get(slotKey, PersistentDataType.STRING);
             }
+        }
+        
+        // Use configured slot if available, otherwise determine from material type
+        if (configuredSlot != null) {
+            switch (configuredSlot.toLowerCase()) {
+                case "helmet":
+                    player.getInventory().setHelmet(item);
+                    break;
+                case "chestplate":
+                    player.getInventory().setChestplate(item);
+                    break;
+                case "leggings":
+                    player.getInventory().setLeggings(item);
+                    break;
+                case "boots":
+                    player.getInventory().setBoots(item);
+                    break;
+                case "mainhand":
+                    player.getInventory().setItemInMainHand(item);
+                    break;
+                case "offhand":
+                    player.getInventory().setItemInOffHand(item);
+                    break;
+                default:
+                    // Unknown slot, add to inventory
+                    plugin.getLogger().warning("Unknown equipment slot: " + configuredSlot);
+                    addToInventoryOrDrop(player, item);
+                    break;
+            }
+        } else {
+            // Fallback to material-based detection
+            if (material.name().contains("_HELMET")) {
+                player.getInventory().setHelmet(item);
+            } else if (material.name().contains("_CHESTPLATE")) {
+                player.getInventory().setChestplate(item);
+            } else if (material.name().contains("_LEGGINGS")) {
+                player.getInventory().setLeggings(item);
+            } else if (material.name().contains("_BOOTS")) {
+                player.getInventory().setBoots(item);
+            } else if (isWeaponOrTool(material)) {
+                player.getInventory().setItemInMainHand(item);
+            } else {
+                // Default to adding to inventory if we can't determine slot
+                addToInventoryOrDrop(player, item);
+            }
+        }
+    }
+    
+    /**
+     * Add item to inventory or drop it if inventory is full
+     */
+    private void addToInventoryOrDrop(Player player, ItemStack item) {
+        if (player.getInventory().firstEmpty() != -1) {
+            player.getInventory().addItem(item);
+        } else {
+            player.getWorld().dropItem(player.getLocation(), item);
         }
     }
 
@@ -379,13 +414,14 @@ public class StarterPackManager {
         ItemStack item = new ItemStack(material, amount);
         
         // Set custom name and lore
-        if (itemMap.containsKey("name") || itemMap.containsKey("lore") || itemMap.containsKey("enchantments")) {
+        if (itemMap.containsKey("name") || itemMap.containsKey("lore") || itemMap.containsKey("enchantments") || itemMap.containsKey("slot")) {
             ItemMeta meta = item.getItemMeta();
             if (meta != null) {
                 // Set display name
                 if (itemMap.containsKey("name")) {
-                    String name = ChatColor.translateAlternateColorCodes('&', (String) itemMap.get("name"));
-                    meta.setDisplayName(name);
+                    String name = (String) itemMap.get("name");
+                    Component displayName = LegacyComponentSerializer.legacyAmpersand().deserialize(name);
+                    meta.displayName(displayName);
                 }
                 
                 // Set lore
@@ -394,11 +430,11 @@ public class StarterPackManager {
                     if (loreObj instanceof java.util.List) {
                         @SuppressWarnings("unchecked")
                         java.util.List<String> loreList = (java.util.List<String>) loreObj;
-                        java.util.List<String> coloredLore = new ArrayList<>();
+                        java.util.List<Component> coloredLore = new ArrayList<>();
                         for (String line : loreList) {
-                            coloredLore.add(ChatColor.translateAlternateColorCodes('&', line));
+                            coloredLore.add(LegacyComponentSerializer.legacyAmpersand().deserialize(line));
                         }
-                        meta.setLore(coloredLore);
+                        meta.lore(coloredLore);
                     }
                 }
                 
@@ -428,6 +464,15 @@ public class StarterPackManager {
                                 plugin.getLogger().warning("Failed to apply enchantment " + enchantName + ": " + e.getMessage());
                             }
                         }
+                    }
+                }
+                
+                // Store slot information in persistent data
+                if (itemMap.containsKey("slot")) {
+                    String slot = (String) itemMap.get("slot");
+                    if (slot != null) {
+                        NamespacedKey slotKey = new NamespacedKey(plugin, "equipment_slot");
+                        meta.getPersistentDataContainer().set(slotKey, PersistentDataType.STRING, slot.toLowerCase());
                     }
                 }
                 
