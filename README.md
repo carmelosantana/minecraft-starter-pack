@@ -31,16 +31,29 @@ A lightweight Minecraft plugin that gives **first-time players** a configurable 
 - ⚡ Event-driven with **minimal performance impact**
 - 🚫 **One pack per player** — uses persistent data to track
 - 🔧 Admin commands for management and testing
+- 🛡️ **Auto-equip starter armor and tools** for new players (if they don't have any)
+- ⚔️ **Separate equipment section** in config for armor and tools
+- 🎯 **Smart equipment detection** — won't equip if player already has gear
 
 ## Default Starter Pack
 
 By default, players joining the server for the first time will receive:
 
+**Inventory Items:**
 | Item                 | Name                    | Description                   |
 |----------------------|--------------------------|-------------------------------|
 | 🥩 Cooked Beef ×16    | —                        | Basic starter food            |
 | 🛠 Diamond Pickaxe     | §bStarter Pickaxe        | Unbreaking III, Efficiency II |
 | 🍞 Gluten-Free Bread ×3 | §fGluten-Free Bread       | Bonus healing food            |
+
+**Auto-Equipped Items (if player has no equipment):**
+| Item                 | Name                    | Description                   |
+|----------------------|--------------------------|-------------------------------|
+| 🪖 Leather Helmet     | §bStarter Helmet         | Protection I                  |
+| 🦺 Leather Chestplate | §bStarter Chestplate     | Protection I                  |
+| 👖 Leather Leggings   | §bStarter Leggings       | Protection I                  |
+| 🥾 Leather Boots      | §bStarter Boots          | Protection I                  |
+| ⚔️ Stone Sword        | §bStarter Sword          | Sharpness I                   |
 
 ## Quick Install
 
@@ -60,6 +73,7 @@ starter-pack:
   broadcast: true
   welcome-message: "&aWelcome to the server, &b{player}&a!"
 
+  # Items to give to inventory
   items:
     - material: DIAMOND_PICKAXE
       name: "&bStarter Pickaxe"
@@ -81,6 +95,26 @@ starter-pack:
         - "&7Light and energizing"
         - "&aRestores extra hunger points"
       amount: 3
+
+  # Equipment to auto-equip (only if player has no equipment)
+  equipment:
+    - material: LEATHER_HELMET
+      name: "&bStarter Helmet"
+      lore:
+        - "&7Basic protection for your head"
+      enchantments:
+        PROTECTION: 1
+      amount: 1
+      slot: helmet
+
+    - material: STONE_SWORD
+      name: "&bStarter Sword"
+      lore:
+        - "&7A basic weapon for defense"
+      enchantments:
+        SHARPNESS: 1
+      amount: 1
+      slot: mainhand
 ```
 
 ### 🔁 Placeholders
@@ -95,6 +129,8 @@ starter-pack:
 | `/starterpack version` | Display plugin info | `starterpack.use` |
 | `/starterpack reload` | Reload config file | `starterpack.admin` |
 | `/starterpack give <player>` | Give pack to any player | `starterpack.admin` |
+| `/starterpack equip <player>` | Equip starter items (only if no equipment) | `starterpack.admin` |
+| `/starterpack force <player>` | Force equip starter items (overrides existing) | `starterpack.admin` |
 
 **Aliases**: `/sp`, `/starter`
 
@@ -106,9 +142,17 @@ starter-pack:
 | `/starterpack version` | Display plugin info | All users |
 | `/starterpack reload` | Reload configuration | `starterpack.admin` |
 | `/starterpack give <player>` | Give starter pack to any player | `starterpack.admin` |
+| `/starterpack equip <player>` | Equip starter items (only if no equipment) | `starterpack.admin` |
+| `/starterpack force <player>` | Force equip starter items (overrides existing) | `starterpack.admin` |
 | `/starterpack reset <player>` | Reset player's starter pack status | `starterpack.admin` |
 | `/starterpack reset all` | Reset all online players | `starterpack.admin` |
 | `/starterpack stats` | Show distribution statistics | `starterpack.admin` |
+
+### Equipment Commands
+
+- **`/starterpack equip <player>`**: Equips the player with starter equipment only if they don't currently have any armor or tools equipped. This is perfect for players who may have lost their equipment.
+
+- **`/starterpack force <player>`**: Forces equipment on the player, moving their current equipment to inventory (or dropping it if inventory is full). This completely replaces their current equipment with the starter equipment.
 
 ## Permissions
 
