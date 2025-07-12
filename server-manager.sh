@@ -8,7 +8,7 @@ set -e
 # Configuration
 SERVER_DIR="server"
 PLUGIN_NAME="starter-pack"
-PLUGIN_JAR="target/${PLUGIN_NAME}-1.0.1.jar"
+PLUGIN_JAR="target/${PLUGIN_NAME}-1.0.2.jar"
 SERVER_JAR="paper.jar"
 MIN_RAM="2G"
 MAX_RAM="4G"
