@@ -1,4 +1,5 @@
-# StarterPack Configuration
+# StarterPack Configuration for Docker/Development
+# This file is used by Docker and development environments
 # https://github.com/carmelosantana/minecraft-starter-pack
 
 starter-pack:
@@ -32,15 +33,63 @@ starter-pack:
     # Cooked Beef for food
     - material: COOKED_BEEF
       amount: 16
-
-    # Custom Gluten-Free Bread with special properties
-    - material: BREAD
-      name: "&fGluten-Free Bread"
+      
+  # Equipment items to auto-equip on new players (if they don't have any)
+  equipment:
+    # Leather armor set with basic protection
+    - material: LEATHER_HELMET
+      name: "&bStarter Helmet"
       lore:
-        - "&7Healthier than wheat bread"
-        - "&7Light and energizing"
-        - "&aRestores extra hunger points"
-      amount: 3
+        - "&7Basic protection for your head"
+      enchantments:
+        PROTECTION: 1
+      amount: 1
+      slot: helmet
+
+    - material: LEATHER_CHESTPLATE
+      name: "&bStarter Chestplate"
+      lore:
+        - "&7Basic protection for your chest"
+      enchantments:
+        PROTECTION: 1
+      amount: 1
+      slot: chestplate
+
+    - material: LEATHER_LEGGINGS
+      name: "&bStarter Leggings"
+      lore:
+        - "&7Basic protection for your legs"
+      enchantments:
+        PROTECTION: 1
+      amount: 1
+      slot: leggings
+
+    - material: LEATHER_BOOTS
+      name: "&bStarter Boots"
+      lore:
+        - "&7Basic protection for your feet"
+      enchantments:
+        PROTECTION: 1
+      amount: 1
+      slot: boots
+
+    # Stone sword for combat
+    - material: STONE_SWORD
+      name: "&bStarter Sword"
+      lore:
+        - "&7A basic weapon for defense"
+      enchantments:
+        SHARPNESS: 1
+      amount: 1
+      slot: mainhand
+
+    # Shield for defense
+    - material: SHIELD
+      name: "&bStarter Shield"
+      lore:
+        - "&7Basic protection for your offhand"
+      amount: 1
+      slot: offhand
 
 # Debug settings (for development)
 debug:

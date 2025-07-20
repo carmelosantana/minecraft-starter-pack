@@ -40,6 +40,10 @@ public class StarterPackCommand implements CommandExecutor, TabCompleter {
                 return handleReload(sender);
             case "give":
                 return handleGive(sender, args);
+            case "equip":
+                return handleEquip(sender, args);
+            case "force":
+                return handleForce(sender, args);
             case "reset":
                 return handleReset(sender, args);
             case "stats":
@@ -103,6 +107,82 @@ public class StarterPackCommand implements CommandExecutor, TabCompleter {
             target.sendMessage(Component.text("You have been given a starter pack by " + sender.getName() + "!", NamedTextColor.GREEN));
         } else {
             sender.sendMessage(Component.text("Failed to give starter pack to " + target.getName() + ".", NamedTextColor.RED));
+        }
+        
+        return true;
+    }
+    
+    /**
+     * Handle equip command
+     */
+    private boolean handleEquip(CommandSender sender, String[] args) {
+        if (!sender.hasPermission("starterpack.admin")) {
+            sender.sendMessage(Component.text("You don't have permission to equip starter packs.", NamedTextColor.RED));
+            return true;
+        }
+        
+        if (args.length < 2) {
+            sender.sendMessage(Component.text("Usage: /starterpack equip <player>", NamedTextColor.RED));
+            return true;
+        }
+        
+        String playerName = args[1];
+        Player target = Bukkit.getPlayer(playerName);
+        
+        if (target == null) {
+            sender.sendMessage(Component.text("Player '" + playerName + "' not found or not online.", NamedTextColor.RED));
+            return true;
+        }
+        
+        // Check if player already has equipment
+        if (plugin.getStarterPackManager().hasAnyEquipment(target)) {
+            sender.sendMessage(Component.text(target.getName() + " already has equipment. Use '/starterpack force " + target.getName() + "' to override.", NamedTextColor.YELLOW));
+            return true;
+        }
+        
+        boolean success = plugin.getStarterPackManager().equipStarterItems(target);
+        
+        if (success) {
+            sender.sendMessage(Component.text("Successfully equipped starter items on " + target.getName() + "!", NamedTextColor.GREEN));
+            target.sendMessage(Component.text("You have been equipped with starter items by " + sender.getName() + "!", NamedTextColor.GREEN));
+        } else {
+            sender.sendMessage(Component.text("Failed to equip starter items on " + target.getName() + ".", NamedTextColor.RED));
+        }
+        
+        return true;
+    }
+    
+    /**
+     * Handle force command
+     */
+    private boolean handleForce(CommandSender sender, String[] args) {
+        if (!sender.hasPermission("starterpack.admin")) {
+            sender.sendMessage(Component.text("You don't have permission to force equip starter packs.", NamedTextColor.RED));
+            return true;
+        }
+        
+        if (args.length < 2) {
+            sender.sendMessage(Component.text("Usage: /starterpack force <player>", NamedTextColor.RED));
+            return true;
+        }
+        
+        String playerName = args[1];
+        Player target = Bukkit.getPlayer(playerName);
+        
+        if (target == null) {
+            sender.sendMessage(Component.text("Player '" + playerName + "' not found or not online.", NamedTextColor.RED));
+            return true;
+        }
+        
+        // Force equip starter items (moves existing equipment to inventory)
+        boolean success = plugin.getStarterPackManager().forceEquipStarterItems(target);
+        
+        if (success) {
+            sender.sendMessage(Component.text("Successfully force equipped starter items on " + target.getName() + "!", NamedTextColor.GREEN));
+            target.sendMessage(Component.text("Your equipment has been replaced with starter items by " + sender.getName() + "!", NamedTextColor.YELLOW));
+            target.sendMessage(Component.text("Your previous equipment has been moved to your inventory or dropped.", NamedTextColor.GRAY));
+        } else {
+            sender.sendMessage(Component.text("Failed to force equip starter items on " + target.getName() + ".", NamedTextColor.RED));
         }
         
         return true;
@@ -207,6 +287,10 @@ public class StarterPackCommand implements CommandExecutor, TabCompleter {
                 .append(Component.text(" - Reload configuration", NamedTextColor.GRAY)));
             sender.sendMessage(Component.text("/starterpack give <player>", NamedTextColor.YELLOW)
                 .append(Component.text(" - Give starter pack to a player", NamedTextColor.GRAY)));
+            sender.sendMessage(Component.text("/starterpack equip <player>", NamedTextColor.YELLOW)
+                .append(Component.text(" - Equip starter items (only if no equipment)", NamedTextColor.GRAY)));
+            sender.sendMessage(Component.text("/starterpack force <player>", NamedTextColor.YELLOW)
+                .append(Component.text(" - Force equip starter items (overrides existing)", NamedTextColor.GRAY)));
             sender.sendMessage(Component.text("/starterpack reset <player|all>", NamedTextColor.YELLOW)
                 .append(Component.text(" - Reset starter pack status", NamedTextColor.GRAY)));
             sender.sendMessage(Component.text("/starterpack stats", NamedTextColor.YELLOW)
@@ -226,7 +310,7 @@ public class StarterPackCommand implements CommandExecutor, TabCompleter {
             List<String> subCommands = Arrays.asList("help", "version");
             
             if (sender.hasPermission("starterpack.admin")) {
-                subCommands = Arrays.asList("help", "version", "reload", "give", "reset", "stats");
+                subCommands = Arrays.asList("help", "version", "reload", "give", "equip", "force", "reset", "stats");
             }
             
             String input = args[0].toLowerCase();
@@ -235,7 +319,7 @@ public class StarterPackCommand implements CommandExecutor, TabCompleter {
                     completions.add(subCommand);
                 }
             }
-        } else if (args.length == 2 && args[0].equalsIgnoreCase("give")) {
+        } else if (args.length == 2 && (args[0].equalsIgnoreCase("give") || args[0].equalsIgnoreCase("equip") || args[0].equalsIgnoreCase("force"))) {
             if (sender.hasPermission("starterpack.admin")) {
                 String input = args[1].toLowerCase();
                 for (Player player : Bukkit.getOnlinePlayers()) {
