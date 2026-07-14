@@ -236,4 +236,4 @@ Ready to accelerate your development with AI?
 
 ## License
 
-This project is licensed under the [Creative Commons Attribution-NonCommercial 4.0 International License](https://creativecommons.org/licenses/by-nc/4.0/).
+This project is licensed under the [GNU Affero General Public License v3.0 or later](LICENSE).
