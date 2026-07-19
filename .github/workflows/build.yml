@@ -28,8 +28,10 @@ jobs:
       - name: Test and package
         run: mvn --batch-mode --no-transfer-progress clean verify
 
+      # Record bare filenames, not build-time paths. Release assets download flat,
+      # so a `target/`-prefixed entry makes `sha256sum --check` fail to find the file.
       - name: Create checksum
-        run: find target -maxdepth 1 -name '*.jar' ! -name 'original-*' -print0 | sort -z | xargs -0 sha256sum > target/SHA256SUMS.txt
+        run: cd target && find . -maxdepth 1 -name '*.jar' ! -name 'original-*' -printf '%f\0' | sort -z | xargs -0 sha256sum > SHA256SUMS.txt
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v7
