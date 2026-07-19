@@ -345,7 +345,7 @@ logging:
 
 - **GitHub Issues**: For bug reports and feature requests
 - **[Discord](https://discord.gg/udbJu8Sbyj)**: Discuss new ideas or solutions
-- **Test Server**: Join at `play.xp.farm` to test plugins live
+- **Test Server**: Join at `play.xpfarm.org` to test plugins live
 
 ## License
 

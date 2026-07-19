@@ -230,7 +230,7 @@ Ready to accelerate your development with AI?
 
 - **[Schedule your call](https://cal.com/carmelosantana/learn-minecraft-with-ai)** - Book a session today!
 - **[Discord](https://discord.gg/udbJu8Sbyj)** - Ask questions, see examples.
-- **Public SMP Server** - Join us at `play.xp.farm` and test our plugins live!
+- **Public SMP Server** - Join us at `play.xpfarm.org` and test our plugins live!
 
 *Turn your plugin ideas into reality in hours, not weeks!*
 
