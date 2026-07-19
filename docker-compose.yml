@@ -22,7 +22,7 @@ services:
       Version: "26.1.2" # Paper target; image always takes the latest build
       NoBackup: "plugins" # Skip plugins during backups
       NoPermCheck: "Y" # Skip permissions check
-      NoViaVersion: "Y" # Enable ViaVersion for compatibility
+      # NoViaVersion: "Y" # Enable ViaVersion for Geyser compatibility
       QuietCurl: "Y" # Reduce curl log output
 
 volumes:
