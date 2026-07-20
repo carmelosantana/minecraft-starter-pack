@@ -236,15 +236,15 @@ adds no dependency.
 ## 8. CI/CD
 
 - [x] Identical standard plugin Actions workflow is installed with the required triggers, Temurin 25 build, artifact, checksum, and release behavior. `.github/workflows/build.yml`, present since `1.1.0`.
-- [ ] Successful main Actions run is recorded before tagging. Not applicable yet — this work sits on `fix/floodgate-name-resolution`, unpushed and unmerged.
+- [x] Successful main Actions run is recorded before tagging. `fix/floodgate-name-resolution` was merged fast-forward to `main` and pushed on 2026-07-20. The `main`-branch Actions run for commit `a10382a` completed with conclusion `success` **before** tag `v1.1.2` was created. No tag was pushed against a red or in-flight run.
 - [ ] Workflow permissions contain no broader access than the documented contract. Not re-checked during this change.
 
-## 9. Release — `v1.1.2` NOT RELEASED
+## 9. Release — `v1.1.2` COMPLETE
 
-- [ ] Semantic version matches the POM, plugin metadata, and `v<version>` tag. `pom.xml` is `1.1.2` and `plugin.yml` uses `version: '${project.version}'`, but no tag exists.
-- [ ] Successful tag Actions run and GitHub release are recorded. Not tagged, pushed, or merged.
-- [ ] Release contains exactly one updater-matching JAR plus `SHA256SUMS.txt` and no `original-*` JAR.
-- [ ] Downloaded release assets pass `sha256sum --check SHA256SUMS.txt`.
+- [x] Semantic version matches the POM, plugin metadata, and `v<version>` tag. Verified: `pom.xml` `<version>` `1.1.2` equals tag `v1.1.2` equals the `plugin.yml` version read out of the built JAR.
+- [x] Successful tag Actions run and GitHub release are recorded. Annotated tag `v1.1.2` created on verified commit `a10382a` and pushed; the tag Actions run completed with conclusion `success`. GitHub release published 2026-07-20 14:47:59 UTC with `draft=false`, `prerelease=false`, and it is now the repository's Latest release.
+- [x] Release contains exactly one updater-matching JAR plus `SHA256SUMS.txt` and no `original-*` JAR. Verified by downloading the published release assets: exactly one JAR matching the updater asset pattern, plus `SHA256SUMS.txt`, and no `original-*` JAR.
+- [x] Downloaded release assets pass `sha256sum --check SHA256SUMS.txt`. Reported `OK` for the JAR.
 
 ## 10. Updater
 
@@ -253,11 +253,15 @@ adds no dependency.
 - [ ] Updater dry-run uses a disposable directory and never a production plugin directory.
 - [ ] Failure retains the installed JAR and default fail-open behavior permits Minecraft startup.
 
+Updater enrollment work was **not performed in this pass** (`v1.1.2` release only).
+
 ## 11. Deployment
 
 - [ ] Dokploy redeployment notes identify the full recreation used to rerun the one-shot updater.
 - [ ] Updater completion, Minecraft startup, destination JAR, and stack/plugin logs were inspected.
 - [ ] No production plugin hot reload was used.
+
+**Not performed.** The operator will deploy and verify live on `play.xpfarm.org` via the dev server with helpers.
 
 **Rollback:** `1.1.2` is additive and behaviour-preserving for Java usernames; rolling back to
 `v1.1.1` restores the previous lookup, which simply cannot find Bedrock players.
