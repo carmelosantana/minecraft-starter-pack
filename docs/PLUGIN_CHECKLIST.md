@@ -159,7 +159,19 @@ re-run.
 
 - [x] Unit tests cover separable logic, configuration, serialization, permissions, and failure paths where applicable. 6 tests added in `PlayerLookupTest` covering `targetNameCandidates` and `noSuchPlayerMessage`; written failing first (7 `cannot find symbol` compile errors with the helper absent), then made to pass. See the coverage limits under Known limitations.
 - [x] `mvn --batch-mode --no-transfer-progress clean verify` succeeds. `Tests run: 8, Failures: 0, Errors: 0, Skipped: 0` / `BUILD SUCCESS`. The 2 pre-existing `StarterPackPluginTest` tests stayed green throughout.
-- [ ] The releasable JAR and embedded `plugin.yml` were inspected; `original-*` JARs are excluded. Not inspected during this change. Note `maven-shade-plugin` is still configured despite every dependency being `provided`/`test` scope, so `original-*` JARs remain possible; not addressed in this patch.
+- [x] The releasable JAR and embedded `plugin.yml` were inspected; `original-*` JARs are excluded. Verified by unzipping the built JAR. Embedded `plugin.yml` reads `version: '1.1.2'`, `api-version: '1.21'`, `main: world.hv2.starterpack.StarterPackPlugin`. Bytecode major version of the first `.class` entry is **69 (Java 25)**, matching the ecosystem standard.
+
+      **Exclusion is at the CI release-asset step, not at build time.** `target/` contains both
+      `starter-pack-1.1.2.jar` and `original-starter-pack-1.1.2.jar` — the `original-*` JAR *is*
+      still produced locally. It is excluded from released assets by `.github/workflows/build.yml`,
+      which filters `! -name 'original-*'` on both the SHA256SUMS step and the `gh release upload`
+      step (and excludes `!target/original-*.jar` from the uploaded build artifact). So no
+      `original-*` JAR can reach a release, but one does exist on disk after a local build.
+
+      `maven-shade-plugin` is a **no-op** here: every dependency is `provided`/`test` scope, so it
+      shades nothing and exists only to rename the untouched jar, which is what creates the
+      `original-*` file. `agua-de-florida` resolved this by removing shading entirely; doing the
+      same here is out of scope for this change.
 
 No test dependency change was needed: `junit-jupiter-api` reaches the test classpath transitively
 through the declared `junit-jupiter-engine` 5.10.1, and `@Test`, `@Nested`, `@DisplayName`, and the
