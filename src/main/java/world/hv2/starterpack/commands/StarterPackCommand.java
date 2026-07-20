@@ -10,6 +10,7 @@ import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
 import world.hv2.starterpack.StarterPackPlugin;
+import world.hv2.starterpack.util.PlayerLookup;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -93,10 +94,10 @@ public class StarterPackCommand implements CommandExecutor, TabCompleter {
         }
         
         String playerName = args[1];
-        Player target = Bukkit.getPlayer(playerName);
+        Player target = PlayerLookup.resolveAllowingPartial(playerName).orElse(null);
         
         if (target == null) {
-            sender.sendMessage(Component.text("Player '" + playerName + "' not found or not online.", NamedTextColor.RED));
+            sender.sendMessage(Component.text(PlayerLookup.noSuchPlayerMessage(playerName, PlayerLookup.onlineNames()), NamedTextColor.RED));
             return true;
         }
         
@@ -127,10 +128,10 @@ public class StarterPackCommand implements CommandExecutor, TabCompleter {
         }
         
         String playerName = args[1];
-        Player target = Bukkit.getPlayer(playerName);
+        Player target = PlayerLookup.resolveAllowingPartial(playerName).orElse(null);
         
         if (target == null) {
-            sender.sendMessage(Component.text("Player '" + playerName + "' not found or not online.", NamedTextColor.RED));
+            sender.sendMessage(Component.text(PlayerLookup.noSuchPlayerMessage(playerName, PlayerLookup.onlineNames()), NamedTextColor.RED));
             return true;
         }
         
@@ -167,10 +168,10 @@ public class StarterPackCommand implements CommandExecutor, TabCompleter {
         }
         
         String playerName = args[1];
-        Player target = Bukkit.getPlayer(playerName);
+        Player target = PlayerLookup.resolveAllowingPartial(playerName).orElse(null);
         
         if (target == null) {
-            sender.sendMessage(Component.text("Player '" + playerName + "' not found or not online.", NamedTextColor.RED));
+            sender.sendMessage(Component.text(PlayerLookup.noSuchPlayerMessage(playerName, PlayerLookup.onlineNames()), NamedTextColor.RED));
             return true;
         }
         
@@ -215,9 +216,9 @@ public class StarterPackCommand implements CommandExecutor, TabCompleter {
             return true;
         }
         
-        Player targetPlayer = Bukkit.getPlayer(target);
+        Player targetPlayer = PlayerLookup.resolveAllowingPartial(target).orElse(null);
         if (targetPlayer == null) {
-            sender.sendMessage(Component.text("Player '" + target + "' not found or not online.", NamedTextColor.RED));
+            sender.sendMessage(Component.text(PlayerLookup.noSuchPlayerMessage(target, PlayerLookup.onlineNames()), NamedTextColor.RED));
             return true;
         }
         
