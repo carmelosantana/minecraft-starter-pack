@@ -233,6 +233,46 @@ JARs mounted together**. The same run backs the gate 7a note in all six reposito
 Out-of-band and not a prerequisite for this release. `1.1.2` changes no updater manifest entry and
 adds no dependency.
 
+### 7b — ecosystem matrix (12 plugins) — PASSED 2026-07-21
+
+Trigger: the updater manifest changed — Timber Blast `v1.0.0` was enrolled
+(`carmelosantana/minecraft-plugin-updater` commit `6065b03`), taking the roster from 11 to 12.
+
+- [x] Fresh-volume Legendary stack test covers all updater-managed plugins. **12/12 PRESENT.**
+      Run via the shared rig (`xpfarm-test-stack matrix up --from-releases`) on a fresh volume,
+      roster read from the live `plugins.json` rather than a hardcoded list. The rig cross-checks
+      the plugin count the server announces against what it parsed, and asserts each plugin is
+      **enabled**, not merely listed.
+- [x] Each updater-managed plugin's manifest `enabled` value, default state, and expected
+      fresh-volume behavior are recorded separately. All 12 entries have `enabled` absent
+      (equivalent to `true`) and no `pin`; every one was therefore expected to install and enable,
+      and every one did. No entry was disabled, so there is no intentional-absence row this run.
+- [x] Paper, Geyser, Floodgate, and ViaVersion start successfully together.
+      Paper reached `Done (15.543s)! For help, type "help"`; the Java port answered a real
+      protocol handshake reporting `Paper 26.1.2 | protocol 775`, `PLAYERS: 0 / 20`. Companions:
+      Geyser-Spigot 2.11.0-SNAPSHOT, floodgate 2.2.5-SNAPSHOT, ViaVersion 5.11.0.
+- [ ] Java and Bedrock smoke tests cover joins. **Not performed — no client attaches to this
+      stack by design.** Per `PLUGIN_LIFECYCLE.md` §7 this is not a blocker; client behavior is a
+      tracked gate-12 play-test obligation, not a matrix result.
+- [x] `play.xpfarm.org` reaches the intended Java and Bedrock entry points.
+      Read-only production check, separate from the disposable stack: DNS `168.231.74.113`;
+      Java `25565` answered a real handshake (`Paper 26.1.2 | protocol 775`, 1 player online);
+      Bedrock UDP `19132` reachable.
+- [x] Ollama and Umami unavailable-endpoint tests keep the server and plugins available.
+      Neither service exists in this stack, so this is the negative path by construction. Both
+      self-disabled cleanly: `Ollama integration is disabled; no API client or listeners were
+      started.` and `Umami analytics is disabled; no tracking listeners or network clients were
+      started.` Server stayed healthy (`list` responded) with all 12 enabled.
+
+This plugin's row: the updater reported `StarterPack: installed v1.1.2` from the published release
+asset and Paper enabled it alongside the other 11. `--from-releases` was used deliberately — it
+installs the real published assets through the real updater, so this is what production installs.
+
+Co-resident: AguaDeFlorida 2.0.0, CopperKingdom 0.2.1, TheCurse 0.2.2, DeathDepot 1.1.1, ElectricFurnace 0.2.1, GlutenFreeBread 1.1.3, Ollama 0.2.1, TimberBlast 1.0.0, Umami 1.1.1, WildWeatherUpdate 1.0.2, WorldCRUD 1.1.2.
+
+Zero exceptions, SEVERE lines, or enable failures attributable to any plugin. No secrets in any
+log line. Stack torn down with `matrix down`; lease released, no orphaned containers.
+
 ## 8. CI/CD
 
 - [x] Identical standard plugin Actions workflow is installed with the required triggers, Temurin 25 build, artifact, checksum, and release behavior. `.github/workflows/build.yml`, present since `1.1.0`.
